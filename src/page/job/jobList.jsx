@@ -2,7 +2,7 @@ import React        from 'react';
 import { Link }             from 'react-router-dom';
 import JobService                 from '../../service/JobService.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input}  from 'antd';
+import {Table,Divider,Button,Card, Tooltip,Input,Modal}  from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const _user = new JobService();
@@ -22,7 +22,12 @@ class JobList extends React.Component{
             pageNumd         : 1,
             perPaged        : 10,
             listType        :'list',
-            searchKeyword:''
+            searchKeyword:'',
+            dictionaryList:[],
+            pageNumd :1,
+            searchDictionary:"",
+            paramValue:"",
+            totald:0,
         };
     }
     componentDidMount(){
@@ -84,7 +89,62 @@ class JobList extends React.Component{
             });
         }
     }
-
+  //打开模式窗口
+  openModelClick(name,param){
+    this.okdata=[];
+    this.setState({ visible: true,
+      dictionaryList:[],paramValue:param,totald:0},function(){
+      this.loadModelData(param);
+    });
+  }
+  //调用模式窗口内的数据查询
+   loadModelData(param){
+    let page = {};
+    page.pageNumd  = this.state.pageNumd;
+    page.perPaged  = this.state.perPaged;
+    page.searchDictionary=this.state.searchDictionary;
+    // _query.getDictionaryList(param,page).then(response=>{
+    //   this.setState({loading: false,dictionaryList:response.data,totald:response.totald},function(){});
+    // }).catch(error=>{
+    //     this.setState({loading:false});
+    //     message.error(error);
+    // });
+    }
+    // 字典页数发生变化的时候
+    onPageNumdChange(pageNumd){
+    this.setState({
+        pageNumd : pageNumd
+    }, () => {
+        this.loadModelData(this.state.paramValue);
+    });
+    }
+    //模式窗口点击确认
+    handleOk = (e) => {
+        // let values=this.okdata.join(",");
+        // let name = this.state.paramName;
+        // this.state.testData[name]=values;
+        // this.props.form.setFieldsValue({[name]:values});
+        this.setState({visible: false,pageNumd:1});
+    }
+    //模式窗口点击取消
+    handleCancel = (e) => {
+        this.okdata=[];
+        this.setState({
+          visible: false,
+         
+        });
+    }
+    //数据字典选中事件
+    onSelectChangeDic = (selectedRowKeys) => {
+    //this.okdata=selectedRowKeys;
+    // this.setState({ selectedRowKeys });
+    }
+    //数据字典的search
+    onDictionarySearch(searchKeyword){
+        // this.setState({pageNumd:1,searchDictionary:searchKeyword}, () => {
+        //     this.loadModelData(this.state.paramValue);
+        // });
+     }
     render(){
         // this.state.list.map((item,index)=>{
         //     item.key=index;
@@ -137,11 +197,51 @@ class JobList extends React.Component{
                   <Divider type="vertical" />
                   <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">暂停</a>
                   <Divider type="vertical" />
-                  <Link to={`/Job/JobExecInfo/1`}>查看任务执行</Link>
+                  <a onClick={e=>this.openModelClick("","")}  href="javascript:;">查看任务执行</a>
                 </span>
               ),
           }];
-       
+          const dictionaryColumns=[{
+            title: '任务编号',
+            dataIndex: 'id',
+            key: 'id'
+            }, {
+            title: '任务名称',
+            dataIndex: 'jobName',
+            key: 'jobName',
+            render: function (text, record, index) {
+                return <Link to={`/user/UserView/${record.id}`}>{text}</Link>;
+            }
+            }, {
+            title: '开始时间',
+            dataIndex: 'begin_time',
+            key: 'begin_time',
+
+            }, {
+            title: '结束进间',
+            dataIndex: 'end_time',
+            key: 'end_time'
+            }, {
+            title: '执行结果',
+            dataIndex: 'jobClassPath',
+            key: 'jobClassPath',
+            }, {
+            title: '失败原因',
+            dataIndex: 'jobDescribe',
+            key: 'jobDescribe'
+            }, {
+            title: '任务状态',
+            dataIndex: 'jobStatusStr',
+            key: 'jobStatusStr'
+            // }, {
+            // title: '操作',
+            // dataIndex: '操作',
+            // render: (text, record) => (
+            //     <span>
+            //     {record.userId != '1' ? <Link to={`/user/userInfo/${record.id}`}>编辑</Link> : ''}
+            //     </span>
+            // ),
+            }];
         return (
             <div id="page-wrapper">
             <Card title="用户列表">
@@ -160,7 +260,20 @@ class JobList extends React.Component{
                 <Table dataSource={this.state.list} columns={columns}  pagination={false}/>
                  
             </Card>
-                
+            <div>
+                <Modal  title="字典查询" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
+                    <Search
+                        style={{ width: 300,marginBottom:'10px' }}
+                        placeholder="请输入..." enterButton="查询"
+                        onSearch={value => this.onDictionarySearch(value)}
+                        />
+                        <Table ref="diction"  columns={dictionaryColumns} 
+                        dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
+                        <Pagination current={this.state.pageNumd} 
+                        total={this.state.totald}  showTotal={total => `共 100条`}
+                        onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
+                </Modal>
+            </div>
             </div>
         )
     }

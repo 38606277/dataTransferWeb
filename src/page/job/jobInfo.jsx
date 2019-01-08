@@ -225,11 +225,17 @@ class JobInfo extends React.Component {
                   )}
                 </FormItem> */}
                 <FormItem {...formItemLayout} label='任务状态' >
-                    <Select  name='job_status' value={this.state.job_status}  style={{ width: 300 }} onChange={(value) =>this.onSelectChange('job_status',value)}>
+                    <Select  name='job_status' value={this.state.job_status}  style={{  minWidth: '300px' }} onChange={(value) =>this.onSelectChange('job_status',value)}>
                         <Option value='1' >启用</Option>
                         <Option value='0' >停用</Option>
                         
                       </Select>
+                  
+                  </FormItem>
+              </Col>
+              <Col span={12}>
+              <FormItem {...formItemLayout} label='参数' >
+                   <Input name="job_param" type='text' />
                   
                   </FormItem>
               </Col>

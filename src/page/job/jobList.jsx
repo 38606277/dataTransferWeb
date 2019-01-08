@@ -71,7 +71,7 @@ class JobList extends React.Component{
             this.loadJobList();
         });
     }
-    deleteUser(id){
+    deleteJob(id){
         if(confirm('确认删除吗？')){
             _job.delJob(id).then(response => {
                 alert("删除成功");
@@ -81,6 +81,9 @@ class JobList extends React.Component{
                 // _mm.errorTips(errMsg);
             });
         }
+    }
+    stopJob(id){
+
     }
   //打开模式窗口
   openModelClick(name,param){
@@ -150,30 +153,35 @@ class JobList extends React.Component{
             key: 'id'
           },{
             title: '任务名称（英文）',
-            dataIndex: 'jobName',
-            key: 'jobName',
+            dataIndex: 'job_name',
+            key: 'job_name',
             render: function(text, record, index) {
                return <Link to={ `/Job/JobInfo/${record.id}` }>{text}</Link>;
              } 
           }, {
             title: '任务组别',
-            dataIndex: 'jobGroup',
-            key: 'jobGroup',
+            dataIndex: 'job_group',
+            key: 'job_group',
            
           },{
             title:'任务表达式',
-            dataIndex:'jobCron',
-            key:'jobCron'
+            dataIndex:'job_cron',
+            key:'job_cron'
           },
         {
             title: '任务描述',
-            dataIndex: 'jobDescribe',
-            key: 'jobDescribe'
+            dataIndex: 'job_describe',
+            key: 'job_describe'
        
         }, {
             title: '是否启用',
-            dataIndex: 'jobStatusStr',
-            key: 'jobStatusStr'
+            dataIndex: 'job_status',
+            key: 'job_status',
+            render: (text, record) => (
+                <span>
+                   {record.job_status=='0'?'停用':'启用'}
+                </span>
+            ),
           },
           {
             title: '任务执行状态',
@@ -186,9 +194,9 @@ class JobList extends React.Component{
                 <span>
                   <Link to={ `/Job/JobInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>
+                  <a onClick={()=>this.deleteJob(`${record.id}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">暂停</a>
+                  <a onClick={()=>this.stopJob(`${record.id}`)} href="javascript:;">暂停</a>
                   <Divider type="vertical" />
                   <a onClick={e=>this.openModelClick("","")}  href="javascript:;">查看任务执行</a>
                 </span>

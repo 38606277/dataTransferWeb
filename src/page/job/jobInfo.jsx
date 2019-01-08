@@ -235,7 +235,7 @@ class JobInfo extends React.Component {
               </Col>
               <Col span={12}>
               <FormItem {...formItemLayout} label='参数' >
-                   <Input name="job_param" type='text' />
+                   <Input name="job_param" type='text' onChange={(e)=>this.onValueChange(e)}/>
                   
                   </FormItem>
               </Col>

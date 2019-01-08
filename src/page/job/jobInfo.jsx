@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Select, Button, Card, Row, Col,Modal } from 'antd';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 import JobService from '../../service/JobService.jsx';
-const JobServices = new JobService();
+const _job = new JobService();
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -28,16 +28,16 @@ class JobInfo extends React.Component {
 
   //初始化加载调用方法
   componentDidMount() {
-    //    if(null!=this.state._name && ''!=this.state._name  && 'null'!=this.state._name){
-    //         JobServices.getJobService(this.state._name).then(response => {
-    //            // this.setState(response);
-    //             this.props.form.setFieldsValue(response);
+       if(null!=this.state.id && ''!=this.state.id  && 'null'!=this.state.id){
+          _job.getJobInfo(this.state.id).then(response => {
+               // this.setState(response);
+                this.props.form.setFieldsValue(response);
 
-    //         }, errMsg => {
-    //             this.setState({});
-    //             localStorge.errorTips(errMsg);
-    //         });
-    //     }
+            }, errMsg => {
+                this.setState({});
+                localStorge.errorTips(errMsg);
+            });
+        }
 
   }
 
@@ -64,7 +64,7 @@ class JobInfo extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.id = this.state.id;
-        JobServices.save(values).then(response => {
+        _job.save(values).then(response => {
           alert("保存成功");
           window.location.href = "#/Job";
         }, errMsg => {
@@ -83,15 +83,10 @@ class JobInfo extends React.Component {
  openModelClick(e){
    let vl=e.target.value;
    let seconds="",minutes="",hours="",day="", month="", week="", year="";
-   if(vl!='' && vl!=null){
+   if(vl!="" && vl!=null){
       let arr= vl.split(" ");
-      seconds=arr[0];
-      minutes=arr[1];
-      hours=arr[2];
-      day=arr[3];
-      month=arr[4];
-      week=arr[5];
-      year=arr[6];
+      seconds=arr[0];minutes=arr[1]; hours=arr[2]; day=arr[3];
+      month=arr[4];week=arr[5]; year=arr[6];
    }
     this.setState({ visible: true, seconds:seconds,minutes:minutes, 
       hours:hours,day:day, month:month,week:week, year:year,},function(){});
@@ -99,9 +94,10 @@ class JobInfo extends React.Component {
   //模式窗口点击确认
   handleOk = (e) => {
     let corns=this.state.seconds+" "+this.state.minutes+" "+this.state.hours+" "+this.state.day+" "+this.state.month+" "+this.state.week+" "+this.state.year;
-    // console.log(corns);
+    if(this.state.year.trim()==""){
+      corns=corns.substring(0,corns.length-1);
+    }
     this.setState({visible: false,jobCron:corns, seconds:"",minutes:"",hours:"",day:"",month:"", week:"",year:"",});
-    
     this.props.form.setFieldsValue({ ['jobCron']: corns });
   }
   //模式窗口点击取消
@@ -130,7 +126,18 @@ class JobInfo extends React.Component {
         sm: {pan: 20},
       },
     };
-
+    const BtnFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
+        },
+      },
+    };
     return (
       <div id="page-wrapper">
         <Card title={this.state.id == 'null' ? '新建任务' : '编辑任务'}>
@@ -211,7 +218,7 @@ class JobInfo extends React.Component {
               </Col>
             </Row>
 
-            <FormItem {...tailFormItemLayout}>
+            <FormItem {...BtnFormItemLayout}>
               <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>创建</Button>
               <Button href="#/Job" type="primary" style={{ marginLeft: '30px' }}>返回</Button>
             </FormItem>

@@ -5,20 +5,14 @@ import Pagination           from 'antd/lib/pagination';
 import {Table,Divider,Button,Card, Tooltip,Input,Modal}  from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-const _user = new JobService();
+const _job = new JobService();
 const Search = Input.Search;
 
 class JobList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            list            : [{
-                id:1,
-                jobName:"abc",
-                jobGroup:"ys",
-                jobDescribe:"预算部门信息ETL",
-                jobCron:"dfdfd",
-            }],
+            list            : [],
             pageNumd         : 1,
             perPaged        : 10,
             listType        :'list',
@@ -31,9 +25,9 @@ class JobList extends React.Component{
         };
     }
     componentDidMount(){
-        // this.loadUserList();
+         this.loadJobList();
     }
-    loadUserList(){
+    loadJobList(){
         let listParam = {};
         listParam.pageNumd  = this.state.pageNumd;
         listParam.perPaged  = this.state.perPaged;
@@ -41,8 +35,7 @@ class JobList extends React.Component{
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
         }
-        _user.getList(listParam).then(response => {
-           // console.log(response);
+        _job.getList(listParam).then(response => {
             this.setState({list:response.data});
         }, errMsg => {
             this.setState({
@@ -56,7 +49,7 @@ class JobList extends React.Component{
         this.setState({
             pageNumd : pageNumd
         }, () => {
-            this.loadUserList();
+            this.loadJobList();
         });
     }
     // 数据变化的时候
@@ -75,14 +68,14 @@ class JobList extends React.Component{
             pageNumd         : 1,
             searchKeyword   : searchKeyword
         }, () => {
-            this.loadUserList();
+            this.loadJobList();
         });
     }
     deleteUser(id){
         if(confirm('确认删除吗？')){
-            _user.delUser(id).then(response => {
+            _job.delJob(id).then(response => {
                 alert("删除成功");
-                this.loadUserList();
+                this.loadJobList();
             }, errMsg => {
                 alert("删除失败");
                 // _mm.errorTips(errMsg);
@@ -103,7 +96,7 @@ class JobList extends React.Component{
     page.pageNumd  = this.state.pageNumd;
     page.perPaged  = this.state.perPaged;
     page.searchDictionary=this.state.searchDictionary;
-    // _query.getDictionaryList(param,page).then(response=>{
+    // _job.getDictionaryList(param,page).then(response=>{
     //   this.setState({loading: false,dictionaryList:response.data,totald:response.totald},function(){});
     // }).catch(error=>{
     //     this.setState({loading:false});
@@ -191,7 +184,7 @@ class JobList extends React.Component{
             dataIndex: '操作',
             render: (text, record) => (
                 <span>
-                  {record.userId!='1'? <Link to={ `/Job/JobInfo/${record.id}` }>编辑</Link>:''}
+                  <Link to={ `/Job/JobInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
                   <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />
@@ -244,7 +237,7 @@ class JobList extends React.Component{
             }];
         return (
             <div id="page-wrapper">
-            <Card title="用户列表">
+            <Card title="任务列表">
                 <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}

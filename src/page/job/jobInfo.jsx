@@ -21,6 +21,7 @@ class JobInfo extends React.Component {
       month:"",
       week:"",
       year:"",
+      selectTransferList:[],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
@@ -28,6 +29,13 @@ class JobInfo extends React.Component {
 
   //初始化加载调用方法
   componentDidMount() {
+        const children2=[];
+        let rlist=[{name:'t1',id:'1'},{name:'t2',id:'2'},{name:'t3',id:'3'},{name:'t4',id:'4'}];
+        for (let i = 0; i < rlist.length; i++) {
+            children2.push(<Option key={rlist[i].name} value={rlist[i].id}>{rlist[i].name}</Option>);
+        }
+        this.setState({selectTransferList:children2});
+
        if(null!=this.state.id && ''!=this.state.id  && 'null'!=this.state.id){
           _job.getJobInfo(this.state.id).then(response => {
                // this.setState(response);
@@ -54,10 +62,14 @@ class JobInfo extends React.Component {
  onValueChangetwo(e) {
   let name = e.target.name,
     value = e.target.value.trim();
-    console.log(name+"=",value);
-  this.setState({[name]:value});
+    this.setState({[name]:value});
 
-}
+  }
+  //编辑字段对应值
+  onSelectChange(name,value){
+    this.setState({[name]:value});  
+    this.props.form.setFieldsValue({[name]:value});
+  }
   //提交
   handleSubmit(e) {
     e.preventDefault();
@@ -98,7 +110,7 @@ class JobInfo extends React.Component {
       corns=corns.substring(0,corns.length-1);
     }
     this.setState({visible: false,jobCron:corns, seconds:"",minutes:"",hours:"",day:"",month:"", week:"",year:"",});
-    this.props.form.setFieldsValue({ ['jobCron']: corns });
+    this.props.form.setFieldsValue({ ['job_cron']: corns });
   }
   //模式窗口点击取消
   handleCancel = (e) => {
@@ -145,19 +157,19 @@ class JobInfo extends React.Component {
             <Row>
               <Col span={12}>
                 <FormItem {...formItemLayout} label="任务名称（英文）">
-                  {getFieldDecorator('jobName', {
+                  {getFieldDecorator('job_name', {
                     rules: [{ required: true, message: '请输入任务名称（英文）!' }],
                   })(
-                    <Input type='text' name='jobName' />
+                    <Input type='text' name='job_name' />
                   )}
                 </FormItem>
               </Col>
               <Col span={12}>
                 <FormItem {...formItemLayout} label='任务组别（英文）' >
-                  {getFieldDecorator('jobGroup', {
+                  {getFieldDecorator('job_group', {
                     rules: [{ required: true, message: '请选择任务组别（英文）!', whitespace: true }],
                   })(
-                    <Input type='text' name='jobGroup' />
+                    <Input type='text' name='job_group' />
                   )}
                 </FormItem>
               </Col>
@@ -165,10 +177,10 @@ class JobInfo extends React.Component {
             <Row>
               <Col span={24}>
                 <FormItem {...tailFormItemLayout} label='任务描述'>
-                  {getFieldDecorator('jobDescribe', {
+                  {getFieldDecorator('job_describe', {
                     rules: [{ required: true, message: '请输入任务描述!', whitespace: true }],
                   })(
-                    <Input type='text' name='jobDescribe' />
+                    <Input type='text' name='job_describe' />
                   )}
                 </FormItem>
               </Col>
@@ -177,10 +189,10 @@ class JobInfo extends React.Component {
             <Row>
               <Col span={12}>
                 <FormItem {...formItemLayout} label='Cron表达式' >
-                  {getFieldDecorator('jobCron', {
+                  {getFieldDecorator('job_cron', {
                     rules: [{ required: true, message: '请输入Cron表达式!', whitespace: true }],
                   })(
-                    <Input type='text' name='jobCron' onClick={(e)=>this.openModelClick(e)}/>
+                    <Input type='text' name='job_cron' onClick={(e)=>this.openModelClick(e)}/>
                   )}
                 </FormItem>
               </Col>
@@ -188,14 +200,11 @@ class JobInfo extends React.Component {
 
               <Col span={12}>
                 <FormItem {...formItemLayout} label='任务脚本'>
-                  {getFieldDecorator('jobClassPath', {
+                  {getFieldDecorator('transfer_id', {
                     rules: [{ required: true, message: '请选择任务脚本!', whitespace: true }],
                   })(
                     <Select style={{ minWidth: '300px' }}  >
-                        <Option key="" value="">预算部门信息</Option>
-                        <Option key="" value="">预算部门信息</Option>
-                        <Option key="" value="">预算部门信息</Option>
-                        <Option key="" value="">预算部门信息</Option>
+                       {this.state.selectTransferList}
                     </Select>
                   )}
                 </FormItem>
@@ -205,16 +214,24 @@ class JobInfo extends React.Component {
             <Row>
               <Col span={12} >
 
-                <FormItem {...formItemLayout} label='任务状态'>
-                  {getFieldDecorator('jobDataMap', {
+                {/* <FormItem {...formItemLayout} label='任务状态'>
+                  {getFieldDecorator('job_param', {
                     rules: [{ required: false, message: '请输入任务关联脚本ID!', whitespace: true }],
                   })(
                     <Select style={{ minWidth: '300px' }}  >
-                    <Option key="" value="">启用</Option>
-                    <Option key="" value="">停用</Option>
+                    <Option  value="1">启用</Option>
+                    <Option  value="2">停用</Option>
                 </Select>
                   )}
-                </FormItem>
+                </FormItem> */}
+                <FormItem {...formItemLayout} label='任务状态' >
+                    <Select  name='job_status' value={this.state.job_status}  style={{ width: 300 }} onChange={(value) =>this.onSelectChange('job_status',value)}>
+                        <Option value='1' >启用</Option>
+                        <Option value='0' >停用</Option>
+                        
+                      </Select>
+                  
+                  </FormItem>
               </Col>
             </Row>
 

@@ -31,19 +31,19 @@ class JobService{
     }
     //删除一个job
     delJob(id){
-        return HttpService.post('transfer/job/deleteJob',id);
+        return HttpService.post('transfer/job/deleteJob',JSON.stringify({id:id}));
     }
     //立即执行一个QuartzJob
     executeJob(id){
-        return HttpService.post('transfer/job/executeJob',id);
+        return HttpService.post('transfer/job/executeJob',JSON.stringify({id:id}));
     }
     //暂停一个QuartzJob
     pauseJob(id){
-        return HttpService.post('transfer/job/pauseJob',id);
+        return HttpService.post('transfer/job/pauseJob',JSON.stringify({id:id}));
     }
     //还原一个QuartzJob
     resumeJob(id){
-        return HttpService.post('transfer/job/resumeJob',id);
+        return HttpService.post('transfer/job/resumeJob',JSON.stringify({id:id}));
     }
      
 }

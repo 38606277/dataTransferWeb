@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select, Button, Card, Row, Col } from 'antd';
+import { Form, Input, Select, Button, Card, Row, Col,Modal } from 'antd';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 import JobService from '../../service/JobService.jsx';
 const JobServices = new JobService();
@@ -12,7 +12,15 @@ class JobInfo extends React.Component {
     super(props);
     this.state = {
       confirmDirty: false,
-      id: this.props.match.params.id
+      id: this.props.match.params.id,
+      visible:false,
+      seconds:"",
+      minutes:"",
+      hours:"",
+      day:"",
+      month:"",
+      week:"",
+      year:"",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
@@ -42,7 +50,14 @@ class JobInfo extends React.Component {
     this.props.form.setFieldsValue({ [name]: value });
 
   }
+ //编辑字段对应值
+ onValueChangetwo(e) {
+  let name = e.target.name,
+    value = e.target.value.trim();
+    console.log(name+"=",value);
+  this.setState({[name]:value});
 
+}
   //提交
   handleSubmit(e) {
     e.preventDefault();
@@ -64,8 +79,35 @@ class JobInfo extends React.Component {
     const value = e.target.value;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   }
-
-
+ //打开模式窗口
+ openModelClick(e){
+   let vl=e.target.value;
+   let seconds="",minutes="",hours="",day="", month="", week="", year="";
+   if(vl!='' && vl!=null){
+      let arr= vl.split(" ");
+      seconds=arr[0];
+      minutes=arr[1];
+      hours=arr[2];
+      day=arr[3];
+      month=arr[4];
+      week=arr[5];
+      year=arr[6];
+   }
+    this.setState({ visible: true, seconds:seconds,minutes:minutes, 
+      hours:hours,day:day, month:month,week:week, year:year,},function(){});
+  }
+  //模式窗口点击确认
+  handleOk = (e) => {
+    let corns=this.state.seconds+" "+this.state.minutes+" "+this.state.hours+" "+this.state.day+" "+this.state.month+" "+this.state.week+" "+this.state.year;
+    // console.log(corns);
+    this.setState({visible: false,jobCron:corns, seconds:"",minutes:"",hours:"",day:"",month:"", week:"",year:"",});
+    
+    this.props.form.setFieldsValue({ ['jobCron']: corns });
+  }
+  //模式窗口点击取消
+  handleCancel = (e) => {
+    this.setState({visible: false, seconds:"",minutes:"",hours:"",day:"",month:"", week:"",year:""});
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -79,15 +121,13 @@ class JobInfo extends React.Component {
       },
     };
     const tailFormItemLayout = {
+      labelCol: {
+        xs: { span: 4 },
+        sm: { span: 4 },
+      },
       wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
+        xs: {span: 20},
+        sm: {pan: 20},
       },
     };
 
@@ -117,7 +157,7 @@ class JobInfo extends React.Component {
             </Row>
             <Row>
               <Col span={24}>
-                <FormItem {...formItemLayout} label='任务描述'>
+                <FormItem {...tailFormItemLayout} label='任务描述'>
                   {getFieldDecorator('jobDescribe', {
                     rules: [{ required: true, message: '请输入任务描述!', whitespace: true }],
                   })(
@@ -133,7 +173,7 @@ class JobInfo extends React.Component {
                   {getFieldDecorator('jobCron', {
                     rules: [{ required: true, message: '请输入Cron表达式!', whitespace: true }],
                   })(
-                    <Input type='text' name='jobCron' />
+                    <Input type='text' name='jobCron' onClick={(e)=>this.openModelClick(e)}/>
                   )}
                 </FormItem>
               </Col>
@@ -177,6 +217,30 @@ class JobInfo extends React.Component {
             </FormItem>
           </Form>
         </Card>
+        <div>
+              <Modal  title="corn表达式" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
+                <Row>
+                  <Col span={3}></Col>
+                  <Col span={3}>秒</Col>
+                  <Col span={3}>分钟</Col>
+                  <Col span={3}>时</Col>
+                  <Col span={3}>日</Col>
+                  <Col span={3}>月</Col>
+                  <Col span={3}>星期</Col>
+                  <Col span={3}>年</Col>
+                </Row>
+                <Row>
+                  <Col span={3}>表达式字段</Col>
+                  <Col span={3}><Input name='seconds' value={this.state.seconds} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                  <Col span={3}><Input name='minutes' value={this.state.minutes} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                  <Col span={3}><Input name='hours' value={this.state.hours} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                  <Col span={3}><Input name='day' value={this.state.day} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                  <Col span={3}><Input name='month' value={this.state.month} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                  <Col span={3}><Input name='week' value={this.state.week} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                  <Col span={3}><Input name='year' value={this.state.year} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                </Row>
+              </Modal>
+          </div>
       </div>
     );
   }

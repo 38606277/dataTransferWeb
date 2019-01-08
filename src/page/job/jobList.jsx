@@ -160,7 +160,7 @@ class JobList extends React.Component{
             dataIndex: 'jobName',
             key: 'jobName',
             render: function(text, record, index) {
-               return <Link to={ `/user/UserView/${record.id}` }>{text}</Link>;
+               return <Link to={ `/Job/JobInfo/${record.id}` }>{text}</Link>;
              } 
           }, {
             title: '任务组别',
@@ -191,7 +191,7 @@ class JobList extends React.Component{
             dataIndex: '操作',
             render: (text, record) => (
                 <span>
-                  {record.userId!='1'? <Link to={ `/user/userInfo/${record.id}` }>编辑</Link>:''}
+                  {record.userId!='1'? <Link to={ `/Job/JobInfo/${record.id}` }>编辑</Link>:''}
                   <Divider type="vertical" />
                   <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />

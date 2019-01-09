@@ -102,12 +102,13 @@ class JobList extends React.Component{
     page.pageNumd  = this.state.pageNumd;
     page.perPaged  = this.state.perPaged;
     page.searchDictionary=this.state.searchDictionary;
-        // _job.getDictionaryList(param,page).then(response=>{
-        //      this.setState({dictionaryList:response.data,totald:response.totald},function(){});
-        // }).catch(error=>{
-        //     this.setState({loading:false});
-        //     message.error(error);
-        // });
+    page.job_id=param;
+        _job.getJobExecuteByJobId(page).then(response=>{
+             this.setState({dictionaryList:response.data,totald:0},function(){});
+        }).catch(error=>{
+            this.setState({loading:false});
+            message.error(error);
+        });
     }
     // 字典页数发生变化的时候
     onPageNumdChange(pageNumd){
@@ -182,7 +183,7 @@ class JobList extends React.Component{
                   <Divider type="vertical" />
                   <a onClick={()=>this.stopJob(`${record.id}`)} href="javascript:;">暂停</a>
                   <Divider type="vertical" />
-                  <a onClick={e=>this.openModelClick("","")}  href="javascript:;">查看任务执行</a>
+                  <a onClick={e=>this.openModelClick(`${record.id}`)}  href="javascript:;">查看任务执行</a>
                 </span>
               ),
           }];

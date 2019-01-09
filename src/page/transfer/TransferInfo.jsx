@@ -3,10 +3,19 @@ import { Form, Input, Select, Button, Card, Row, Col } from 'antd';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 import TransferService from '../../service/TransferService.jsx';
 import TextArea from 'antd/lib/input/TextArea';
+import CodeMirror from 'react-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/theme/ambiance.css';
 const _transfer = new TransferService();
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;
-const Option = Select.Option;
+const options = {
+  lineNumbers: true,                //显示行号  
+  mode: { name: "text/x-mysql" },          //定义mode  
+  extraKeys: { "Ctrl": "autocomplete" },//自动提示配置  
+  theme: "default"
+};
 
 class TransferInfo extends React.Component {
   constructor(props) {
@@ -25,8 +34,11 @@ class TransferInfo extends React.Component {
   componentDidMount() {
        if(null!=this.state.transfer_id && ''!=this.state.transfer_id  && 'null'!=this.state.transfer_id){
         _transfer.getTransferInfo(this.state.transfer_id).then(response => {
-               // this.setState(response);
-                this.props.form.setFieldsValue(response);
+                this.props.form.setFieldsValue(response.data);
+                this.refs.editorsql.codeMirror.setValue(response.data.qry_sql);
+                let editorsql = this.refs.editorsql;
+                editorsql.codeMirror.setSize('100%', '500px');
+                editorsql.codeMirror.border = "solid  1px";
             }, errMsg => {
                 this.setState({});
                 localStorge.errorTips(errMsg);
@@ -59,6 +71,7 @@ class TransferInfo extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.transfer_id = this.state.transfer_id;
+        values.transfer_content = this.refs.editorsql.codeMirror.getValue();
         _transfer.save(values).then(response => {
           alert("保存成功");
           window.location.href = "#/Transfer";
@@ -128,12 +141,15 @@ class TransferInfo extends React.Component {
             <Row>
               <Col span={24}>
                 <FormItem {...tailFormItemLayout} label='脚本内容'>
-                  {getFieldDecorator('transfer_content', {
+                  {/* {getFieldDecorator('transfer_content', {
                     rules: [{ required: true, message: '请输入脚本内容!', whitespace: true }],
-                  })(
-                    <TextArea type='text' name='transfer_content' ></TextArea>
-                  )}
+                  })( */}
+                    {/* <TextArea type='text' name='transfer_content' ></TextArea> */}
+                    <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
+
+                  {/* )} */}
                 </FormItem>
+
               </Col>
              
             </Row>

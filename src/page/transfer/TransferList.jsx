@@ -88,11 +88,11 @@ class TransferList extends React.Component{
         // })
         const dataSource = this.state.list;
         const columns = [{
-            title: '任务编号',
+            title: '脚本编号',
             dataIndex: 'transfer_id',
             key: 'transfer_id'
           },{
-            title: '任务名称',
+            title: '脚本名称',
             dataIndex: 'transfer_name',
             key: 'transfer_name',
             render: function(text, record, index) {

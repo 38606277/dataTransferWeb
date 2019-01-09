@@ -14,8 +14,8 @@ class JobService{
         return HttpService.post('transfer/job/getAllJob',JSON.stringify(listParam));
     }
     //获取已经在执行的任务列表
-    getJobList(listParam){
-        return HttpService.post('transfer/job/getMyJobListByUserId',JSON.stringify(listParam));
+    getJobExecuteByJobId(page){
+        return HttpService.post('transfer/jobExecute/getJobExecuteByJobId',JSON.stringify(page));
     }
     // 获取任务详情
     getJobInfo(JobId){

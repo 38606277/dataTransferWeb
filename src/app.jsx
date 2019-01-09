@@ -43,7 +43,11 @@ const JobRouter = Loadable({
     loading: loading,
     delay:3000
 });
-
+const TransferRouter = Loadable({
+    loader: () => import('./page/transfer/routerTransfer.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 class App extends React.Component {
     render() {
@@ -76,6 +80,7 @@ class App extends React.Component {
                             <Route exact path="/" component={Home} />
                             <Route path="/job" component={JobRouter}/>
                             <Route path="/user" component={UserRouter}/>
+                            <Route path="/Transfer" component={TransferRouter}/>
                         </Switch>
                     </Layout>
                 );

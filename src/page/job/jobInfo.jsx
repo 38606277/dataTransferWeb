@@ -30,12 +30,16 @@ class JobInfo extends React.Component {
   //初始化加载调用方法
   componentDidMount() {
         const children2=[];
-        let rlist=[{name:'t1',id:'1'},{name:'t2',id:'2'},{name:'t3',id:'3'},{name:'t4',id:'4'}];
-        for (let i = 0; i < rlist.length; i++) {
-            children2.push(<Option key={rlist[i].name} value={rlist[i].id}>{rlist[i].name}</Option>);
-        }
-        this.setState({selectTransferList:children2});
-
+        _job.getAllTransfer().then(response=>{
+          if(response.resultCode!='3000'){
+            let rlist=response.data;
+            for (let i = 0; i < rlist.length; i++) {
+                children2.push(<Option key={rlist[i].transfer_id} value={rlist[i].transfer_id}>{rlist[i].transfer_name}</Option>);
+            }
+            this.setState({selectTransferList:children2});
+          }
+      });
+        
        if(null!=this.state.id && ''!=this.state.id  && 'null'!=this.state.id){
           _job.getJobInfo(this.state.id).then(response => {
                // this.setState(response);
@@ -74,6 +78,7 @@ class JobInfo extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
       if (!err) {
         values.id = this.state.id;
         _job.save(values).then(response => {
@@ -201,9 +206,9 @@ class JobInfo extends React.Component {
               <Col span={12}>
                 <FormItem {...formItemLayout} label='任务脚本'>
                   {getFieldDecorator('transfer_id', {
-                    rules: [{ required: true, message: '请选择任务脚本!', whitespace: true }],
+                    // rules: [{ required: true, message: '请选择任务脚本!', whitespace: true }],
                   })(
-                    <Select style={{ minWidth: '300px' }}  >
+                    <Select style={{ minWidth: '300px' }}  allowClear={true} onChange={(value) =>this.onSelectChange('transfer_id',value)}>
                        {this.state.selectTransferList}
                     </Select>
                   )}

@@ -83,14 +83,17 @@ class JobList extends React.Component{
         }
     }
     stopJob(id){
-
+        _job.pauseJob(id).then(response => {
+            alert("暂停成功");
+            this.loadJobList();
+        }, errMsg => {
+            alert("暂停失败");
+        });
     }
   //打开模式窗口
-  openModelClick(name,param){
-    this.okdata=[];
-    this.setState({ visible: true,
-      dictionaryList:[],paramValue:param,totald:0},function(){
-      this.loadModelData(param);
+  openModelClick(id){
+    this.setState({ visible: true,dictionaryList:[],paramValue:id,totald:0},function(){
+      this.loadModelData(id);
     });
   }
   //调用模式窗口内的数据查询
@@ -99,55 +102,36 @@ class JobList extends React.Component{
     page.pageNumd  = this.state.pageNumd;
     page.perPaged  = this.state.perPaged;
     page.searchDictionary=this.state.searchDictionary;
-    // _job.getDictionaryList(param,page).then(response=>{
-    //   this.setState({loading: false,dictionaryList:response.data,totald:response.totald},function(){});
-    // }).catch(error=>{
-    //     this.setState({loading:false});
-    //     message.error(error);
-    // });
+        // _job.getDictionaryList(param,page).then(response=>{
+        //      this.setState({dictionaryList:response.data,totald:response.totald},function(){});
+        // }).catch(error=>{
+        //     this.setState({loading:false});
+        //     message.error(error);
+        // });
     }
     // 字典页数发生变化的时候
     onPageNumdChange(pageNumd){
-    this.setState({
-        pageNumd : pageNumd
-    }, () => {
-        this.loadModelData(this.state.paramValue);
-    });
+        this.setState({
+            pageNumd : pageNumd
+        }, () => {
+            this.loadModelData(this.state.paramValue);
+        });
     }
     //模式窗口点击确认
     handleOk = (e) => {
-        // let values=this.okdata.join(",");
-        // let name = this.state.paramName;
-        // this.state.testData[name]=values;
-        // this.props.form.setFieldsValue({[name]:values});
         this.setState({visible: false,pageNumd:1});
     }
     //模式窗口点击取消
     handleCancel = (e) => {
-        this.okdata=[];
-        this.setState({
-          visible: false,
-         
-        });
+        this.setState({visible: false, });
     }
-    //数据字典选中事件
-    onSelectChangeDic = (selectedRowKeys) => {
-    //this.okdata=selectedRowKeys;
-    // this.setState({ selectedRowKeys });
-    }
-    //数据字典的search
-    onDictionarySearch(searchKeyword){
-        // this.setState({pageNumd:1,searchDictionary:searchKeyword}, () => {
-        //     this.loadModelData(this.state.paramValue);
-        // });
-     }
+   
     render(){
         // this.state.list.map((item,index)=>{
         //     item.key=index;
         // })
         const dataSource = this.state.list;
-        let self = this;
-          const columns = [{
+        const columns = [{
             title: '任务编号',
             dataIndex: 'id',
             key: 'id'
@@ -208,11 +192,11 @@ class JobList extends React.Component{
             key: 'id'
             }, {
             title: '任务名称',
-            dataIndex: 'jobName',
-            key: 'jobName',
-            render: function (text, record, index) {
-                return <Link to={`/user/UserView/${record.id}`}>{text}</Link>;
-            }
+            dataIndex: 'job_name',
+            key: 'job_name',
+            // render: function (text, record, index) {
+            //     return <Link to={`/user/UserView/${record.id}`}>{text}</Link>;
+            // }
             }, {
             title: '开始时间',
             dataIndex: 'begin_time',
@@ -232,8 +216,8 @@ class JobList extends React.Component{
             key: 'jobDescribe'
             }, {
             title: '任务状态',
-            dataIndex: 'jobStatusStr',
-            key: 'jobStatusStr'
+            dataIndex: 'job_status',
+            key: 'job_status'
             // }, {
             // title: '操作',
             // dataIndex: '操作',
@@ -262,12 +246,12 @@ class JobList extends React.Component{
                  
             </Card>
             <div>
-                <Modal  title="字典查询" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
-                    <Search
+                <Modal  title="执行结果列表" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
+                    {/* <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..." enterButton="查询"
                         onSearch={value => this.onDictionarySearch(value)}
-                        />
+                        /> */}
                         <Table ref="diction"  columns={dictionaryColumns} 
                         dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
                         <Pagination current={this.state.pageNumd} 

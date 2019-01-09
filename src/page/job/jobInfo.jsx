@@ -14,6 +14,7 @@ class JobInfo extends React.Component {
       confirmDirty: false,
       id: this.props.match.params.id,
       visible:false,
+      visibletwo:false,
       seconds:"",
       minutes:"",
       hours:"",
@@ -22,7 +23,9 @@ class JobInfo extends React.Component {
       week:"",
       year:"",
       selectTransferList:[],
-      selectList:[]
+      selectList:[],
+      mkey:"",
+      mvalue:"",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
@@ -126,6 +129,23 @@ class JobInfo extends React.Component {
   handleCancel = (e) => {
     this.setState({visible: false, seconds:"",minutes:"",hours:"",day:"",month:"", week:"",year:""});
   }
+
+  //打开模式窗口
+ openModelClickTwo(e){
+   let vls=e.target.value;
+   this.setState({ visibletwo: true, },function(){});
+ }
+ //模式窗口点击确认
+ handleOktwo = (e) => {
+   
+   this.setState({visibletwo: false, mkey:'',mvalue:''});
+   this.props.form.setFieldsValue({ ['job_param']: '{'+this.state.mkey+':'+this.state.mvalue+'}' });
+ }
+ //模式窗口点击取消
+ handleCanceltwo = (e) => {
+   this.setState({visibletwo: false, mkey:'',mvalue:''});
+ }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -223,17 +243,6 @@ class JobInfo extends React.Component {
        
             <Row>
               <Col span={12} >
-
-                {/* <FormItem {...formItemLayout} label='任务状态'>
-                  {getFieldDecorator('job_param', {
-                    rules: [{ required: false, message: '请输入任务关联脚本ID!', whitespace: true }],
-                  })(
-                    <Select style={{ minWidth: '300px' }}  >
-                    <Option  value="1">启用</Option>
-                    <Option  value="2">停用</Option>
-                </Select>
-                  )}
-                </FormItem> */}
                 <FormItem {...formItemLayout} label='任务状态' >
                 {getFieldDecorator('job_status', {
                   })(
@@ -246,8 +255,10 @@ class JobInfo extends React.Component {
               </Col>
               <Col span={12}>
               <FormItem {...formItemLayout} label='参数' >
-                   <Input name="job_param" type='text' onChange={(e)=>this.onValueChange(e)}/>
-                  
+               {getFieldDecorator('job_param', {
+                  })(
+                   <Input type='text' name="job_param" onClick={(e)=>this.openModelClickTwo(e)}/>
+                  )}
                   </FormItem>
               </Col>
             </Row>
@@ -280,6 +291,18 @@ class JobInfo extends React.Component {
                   <Col span={3}><Input name='week' value={this.state.week} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
                   <Col span={3}><Input name='year' value={this.state.year} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
                 </Row>
+              </Modal>
+          </div>
+          <div>
+              <Modal  title="param" width='600px' visible={this.state.visibletwo}  onOk={this.handleOktwo} onCancel={this.handleCanceltwo}>
+                  <Row>
+                    <Col span={3}>key</Col>
+                    <Col span={3} style={{width:80,marginLeft:20}}>value</Col>
+                  </Row>
+                  <Row>
+                    <Col span={3}><Input name='mkey' value={this.state.mkey} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
+                    <Col span={3}><Input name='mvalue' value={this.state.mvalue} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80,marginLeft:20}}/></Col>
+                  </Row>
               </Modal>
           </div>
       </div>

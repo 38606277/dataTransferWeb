@@ -4,6 +4,7 @@ import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-route
 import JobList from './JobList.jsx';
 import JobInfo from './JobInfo.jsx';
 import JobExecInfo from './jobExecInfo.jsx';
+import JobLog from './JobLog.jsx';
 
 class RouterJob extends React.Component{
     render(){
@@ -12,6 +13,7 @@ class RouterJob extends React.Component{
                  <Route path="/Job/JobList" component={JobList} />
                  <Route path="/Job/JobInfo/:id" component={JobInfo} />
                  <Route path="/Job/JobExecInfo/:id" component={JobExecInfo} />
+                 <Route path="/Job/JobLog/:id" component={JobLog} />
                  <Redirect exact from="/Job" to="/Job/JobList"/> 
             </Switch>
         )

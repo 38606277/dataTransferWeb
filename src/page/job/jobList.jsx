@@ -141,7 +141,7 @@ class JobList extends React.Component{
             dataIndex: 'job_name',
             key: 'job_name',
             render: function(text, record, index) {
-               return <Link to={ `/Job/JobInfo/${record.id}` }>{text}</Link>;
+               return <Link to={ `/Job/JobLog/${record.id}` }>{text}</Link>;
              } 
           }, {
             title: '任务组别',

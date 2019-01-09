@@ -22,6 +22,7 @@ class JobInfo extends React.Component {
       week:"",
       year:"",
       selectTransferList:[],
+      selectList:[]
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
@@ -29,7 +30,8 @@ class JobInfo extends React.Component {
 
   //初始化加载调用方法
   componentDidMount() {
-        const children2=[];
+        let sl=[{id:0,name:'停用'},{id:1,name:'启用'}];
+        const children2=[],children3=[];
         _job.getAllTransfer().then(response=>{
           if(response.resultCode!='3000'){
             let rlist=response.data;
@@ -39,15 +41,18 @@ class JobInfo extends React.Component {
             this.setState({selectTransferList:children2});
           }
       });
-        
+      for (let i = 0; i < sl.length; i++) {
+          children3.push(<Option key={sl[i].id} value={sl[i].id}>{sl[i].name}</Option>);
+      }
+      this.setState({selectList:children3});
+
        if(null!=this.state.id && ''!=this.state.id  && 'null'!=this.state.id){
           _job.getJobInfo(this.state.id).then(response => {
-               // this.setState(response);
-                this.props.form.setFieldsValue(response);
+                this.setState(response.data);
+                this.props.form.setFieldsValue(response.data);
 
             }, errMsg => {
                 this.setState({});
-                localStorge.errorTips(errMsg);
             });
         }
 
@@ -230,12 +235,13 @@ class JobInfo extends React.Component {
                   )}
                 </FormItem> */}
                 <FormItem {...formItemLayout} label='任务状态' >
-                    <Select  name='job_status' value={this.state.job_status}  style={{  minWidth: '300px' }} onChange={(value) =>this.onSelectChange('job_status',value)}>
-                        <Option value='1' >启用</Option>
-                        <Option value='0' >停用</Option>
+                {getFieldDecorator('job_status', {
+                  })(
+                    <Select  name='job_status'  allowClear={true}  style={{  minWidth: '300px' }} onChange={(value) =>this.onSelectChange('job_status',value)}>
                         
+                        {this.state.selectList}
                       </Select>
-                  
+                  )}
                   </FormItem>
               </Col>
               <Col span={12}>

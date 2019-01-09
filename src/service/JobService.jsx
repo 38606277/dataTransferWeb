@@ -19,7 +19,7 @@ class JobService{
     }
     // 获取任务详情
     getJobInfo(JobId){
-        return HttpService.post('transfer/job/toDetail?id='+JobId,null);
+        return HttpService.post('transfer/job/getJobById',JSON.stringify({id:JobId}));
     }
      // 保存
     save(Param){

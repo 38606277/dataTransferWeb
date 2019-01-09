@@ -15,8 +15,8 @@ class TransferService{
     }
     
     // 获取任务详情
-    getTransferInfo(JobId){
-        return HttpService.post('transfer/sql/toDetail?id='+JobId,null);
+    getTransferInfo(Id){
+        return HttpService.post('transfer/sql/getTransferById',JSON.stringify({id:Id}));
     }
      // 保存
     save(Param){

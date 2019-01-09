@@ -5,14 +5,16 @@ import TransferService from '../../service/TransferService.jsx';
 import TextArea from 'antd/lib/input/TextArea';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/sql/sql';
+//import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/xml/xml';
 import 'codemirror/theme/ambiance.css';
+import 'codemirror/addon/hint/xml-hint';
 const _transfer = new TransferService();
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;
 const options = {
   lineNumbers: true,                //显示行号  
-  mode: { name: "text/x-mysql" },          //定义mode  
+  mode: { name: "text/xml" },          //定义mode  
   extraKeys: { "Ctrl": "autocomplete" },//自动提示配置  
   theme: "default"
 };
@@ -35,7 +37,7 @@ class TransferInfo extends React.Component {
        if(null!=this.state.transfer_id && ''!=this.state.transfer_id  && 'null'!=this.state.transfer_id){
         _transfer.getTransferInfo(this.state.transfer_id).then(response => {
                 this.props.form.setFieldsValue(response.data);
-                this.refs.editorsql.codeMirror.setValue(response.data.qry_sql);
+                this.refs.editorsql.codeMirror.setValue(response.data.transfer_content);
                 let editorsql = this.refs.editorsql;
                 editorsql.codeMirror.setSize('100%', '500px');
                 editorsql.codeMirror.border = "solid  1px";

@@ -16,7 +16,7 @@ const options = {
   lineNumbers: true,                //显示行号  
   mode: { name: "text/xml" },          //定义mode  
   extraKeys: { "Ctrl": "autocomplete" },//自动提示配置  
-  theme: "default"
+  theme: "default",
 };
 
 class TransferInfo extends React.Component {
@@ -141,24 +141,19 @@ class TransferInfo extends React.Component {
              
             </Row>
             <Row>
-              <Col span={24}>
-                <FormItem {...tailFormItemLayout} label='脚本内容'>
-                  {/* {getFieldDecorator('transfer_content', {
-                    rules: [{ required: true, message: '请输入脚本内容!', whitespace: true }],
-                  })( */}
-                    {/* <TextArea type='text' name='transfer_content' ></TextArea> */}
-                    <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
-
-                  {/* )} */}
-                </FormItem>
-
+              <Col span={4} style={{textAlign:'right'}}>
+              <FormItem label="脚本内容"></FormItem>
+                
               </Col>
-             
+              <Col span={20}>
+                <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
+
+                </Col>
             </Row>
            
 
             <FormItem {...BtnFormItemLayout}>
-              <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>创建</Button>
+              <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>保存</Button>
               <Button href="#/Transfer" type="primary" style={{ marginLeft: '30px' }}>返回</Button>
             </FormItem>
           </Form>

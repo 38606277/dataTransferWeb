@@ -264,7 +264,7 @@ class JobInfo extends React.Component {
             </Row>
 
             <FormItem {...BtnFormItemLayout}>
-              <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>创建</Button>
+              <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>保存</Button>
               <Button href="#/Job" type="primary" style={{ marginLeft: '30px' }}>返回</Button>
             </FormItem>
           </Form>

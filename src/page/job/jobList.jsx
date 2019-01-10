@@ -13,8 +13,8 @@ class JobList extends React.Component{
         super(props);
         this.state = {
             list            : [],
-            pageNumd         : 1,
-            perPaged        : 10,
+            pageNum        : 1,
+            perPage        : 10,
             listType        :'list',
             searchKeyword:'',
             dictionaryList:[],
@@ -29,8 +29,8 @@ class JobList extends React.Component{
     }
     loadJobList(){
         let listParam = {};
-        listParam.pageNumd  = this.state.pageNumd;
-        listParam.perPaged  = this.state.perPaged;
+        listParam.pageNum  = this.state.pageNum;
+        listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
@@ -45,9 +45,9 @@ class JobList extends React.Component{
         });
     }
     // 页数发生变化的时候
-    onPageNumChange(pageNumd){
+    onPageNumChange(pageNum){
         this.setState({
-            pageNumd : pageNumd
+            pageNum : pageNum
         }, () => {
             this.loadJobList();
         });
@@ -65,13 +65,17 @@ class JobList extends React.Component{
         let listType = searchKeyword === '' ? 'list' : 'search';
         this.setState({
             listType:listType,
-            pageNumd         : 1,
+            pageNum         : 1,
             searchKeyword   : searchKeyword
         }, () => {
             this.loadJobList();
         });
     }
-    deleteJob(id){
+    deleteJob(id,status){
+        if(status=='1'){
+            alert("正在运行中不能删除！");
+            return false;
+        }
         if(confirm('确认删除吗？')){
             _job.delJob(id).then(response => {
                 alert("删除成功");
@@ -84,19 +88,20 @@ class JobList extends React.Component{
     }
     stopJob(id,status){
         if(status==0){
-            _job.pauseJob(id).then(response => {
-                alert("暂停成功");
-                this.loadJobList();
-            }, errMsg => {
-                alert("暂停失败");
-            });
-        }else{
             _job.executeJob(id).then(response => {
                 alert("启动成功");
                 this.loadJobList();
             }, errMsg => {
                 alert("启动失败");
             });
+        }else{
+            _job.pauseJob(id).then(response => {
+                alert("暂停成功");
+                this.loadJobList();
+            }, errMsg => {
+                alert("暂停失败");
+            });
+           
         }  
     }
   //打开模式窗口
@@ -109,11 +114,11 @@ class JobList extends React.Component{
    loadModelData(param){
     let page = {};
     page.pageNumd  = this.state.pageNumd;
-    page.perPaged  = this.state.perPaged;
+    page.perPaged  = 10;
     page.searchDictionary=this.state.searchDictionary;
     page.job_id=param;
         _job.getJobExecuteByJobId(page).then(response=>{
-             this.setState({dictionaryList:response.data,totald:0},function(){});
+             this.setState({dictionaryList:response.data.resultRows,totald:response.data.resultTotal});
         }).catch(error=>{
             this.setState({loading:false});
             message.error(error);
@@ -168,20 +173,15 @@ class JobList extends React.Component{
             key: 'job_describe'
        
         }, 
-        // {
-        //     title: '是否启用',
-        //     dataIndex: 'job_status',
-        //     key: 'job_status',
-        //     render: (text, record) => (
-        //         <span>
-        //            {record.job_status=='0'?'停用':'启用'}
-        //         </span>
-        //     ),
-        //   },
-          {
-            title: '任务执行状态',
-            dataIndex: 'jobStatusStr',
-            key: 'jobStatusStr'
+        {
+            title: '运行状态',
+            dataIndex: 'job_status',
+            key: 'job_status',
+            render: (text, record) => (
+                <span>
+                   {record.job_status=='0'?'停用':'启用'}
+                </span>
+            ),
           },{
             title: '操作',
             dataIndex: '操作',
@@ -189,9 +189,9 @@ class JobList extends React.Component{
                 <span>
                   <Link to={ `/Job/JobInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.deleteJob(`${record.id}`)} href="javascript:;">删除</a>
+                  <a onClick={()=>this.deleteJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.stopJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">{record.job_status=='0'?'暂停':'启用'}</a>
+                  <a onClick={()=>this.stopJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">{record.job_status=='1'?'暂停':'启用'}</a>
                   <Divider type="vertical" />
                   <a onClick={e=>this.openModelClick(`${record.id}`)}  href="javascript:;">查看任务执行</a>
                 </span>
@@ -256,9 +256,9 @@ class JobList extends React.Component{
                 </Tooltip>
                 
                 <Table dataSource={this.state.list} columns={columns}  pagination={false}/>
-                <Pagination current={this.state.pageNumd} 
+                <Pagination current={this.state.pageNum} 
                         total={this.state.total}  showTotal={total => `共 ${this.state.total}条`}
-                        onChange={(pageNumd) => this.onPageNumChange(pageNumd)}/> 
+                        onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
             </Card>
             <div>
                 <Modal  title="执行结果列表" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>

@@ -11,24 +11,24 @@ class FndvarService{
     // 获取任务列表
     getList(listParam){
       
-        return HttpService.post('transfer/sql/getAllTransfer',JSON.stringify(listParam));
+        return HttpService.post('transfer/globalVar/getAllFndVar',JSON.stringify(listParam));
     }
     
     // 获取任务详情
     getFndvarInfo(Id){
-        return HttpService.post('transfer/sql/getTransferById',JSON.stringify({id:Id}));
+        return HttpService.post('transfer/globalVar/getFndVarByName',JSON.stringify({var_name:Id}));
     }
      // 保存
     save(Param,action){
         if(action=='Create'){
-            return HttpService.post('transfer/sql/createTransfer',JSON.stringify(Param));
+            return HttpService.post('transfer/globalVar/createFndVar',JSON.stringify(Param));
         }else{
-            return HttpService.post('transfer/sql/updateTransfer',JSON.stringify(Param));
+            return HttpService.post('transfer/globalVar/updateFndVar',JSON.stringify(Param));
         }
     }
     //删除一个job
     delFndvar(id){
-        return HttpService.post('transfer/sql/deleteTransfer',JSON.stringify({id:id}));
+        return HttpService.post('transfer/globalVar/deleteFndVar',JSON.stringify({var_name:id}));
     }
     
 }

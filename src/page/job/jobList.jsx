@@ -201,10 +201,10 @@ class JobList extends React.Component{
                 title: '任务编号',
                 dataIndex: 'id',
                 key: 'id'
-            }, {
-                title: '任务名称',
-                dataIndex: 'job_name',
-                key: 'job_name',
+            // }, {
+            //     title: '任务名称',
+            //     dataIndex: 'job_name',
+            //     key: 'job_name',
             }, {
                 title: '开始时间',
                 dataIndex: 'begin_time',

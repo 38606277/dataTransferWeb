@@ -71,7 +71,11 @@ class JobList extends React.Component{
             this.loadJobList();
         });
     }
-    deleteJob(id){
+    deleteJob(id,status){
+        if(status=='1'){
+            alert("正在运行中不能删除！");
+            return false;
+        }
         if(confirm('确认删除吗？')){
             _job.delJob(id).then(response => {
                 alert("删除成功");
@@ -84,19 +88,20 @@ class JobList extends React.Component{
     }
     stopJob(id,status){
         if(status==0){
-            _job.pauseJob(id).then(response => {
-                alert("暂停成功");
-                this.loadJobList();
-            }, errMsg => {
-                alert("暂停失败");
-            });
-        }else{
             _job.executeJob(id).then(response => {
                 alert("启动成功");
                 this.loadJobList();
             }, errMsg => {
                 alert("启动失败");
             });
+        }else{
+            _job.pauseJob(id).then(response => {
+                alert("暂停成功");
+                this.loadJobList();
+            }, errMsg => {
+                alert("暂停失败");
+            });
+           
         }  
     }
   //打开模式窗口
@@ -168,20 +173,15 @@ class JobList extends React.Component{
             key: 'job_describe'
        
         }, 
-        // {
-        //     title: '是否启用',
-        //     dataIndex: 'job_status',
-        //     key: 'job_status',
-        //     render: (text, record) => (
-        //         <span>
-        //            {record.job_status=='0'?'停用':'启用'}
-        //         </span>
-        //     ),
-        //   },
-          {
-            title: '任务执行状态',
-            dataIndex: 'jobStatusStr',
-            key: 'jobStatusStr'
+        {
+            title: '运行状态',
+            dataIndex: 'job_status',
+            key: 'job_status',
+            render: (text, record) => (
+                <span>
+                   {record.job_status=='0'?'停用':'启用'}
+                </span>
+            ),
           },{
             title: '操作',
             dataIndex: '操作',
@@ -189,9 +189,9 @@ class JobList extends React.Component{
                 <span>
                   <Link to={ `/Job/JobInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.deleteJob(`${record.id}`)} href="javascript:;">删除</a>
+                  <a onClick={()=>this.deleteJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.stopJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">{record.job_status=='0'?'暂停':'启用'}</a>
+                  <a onClick={()=>this.stopJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">{record.job_status=='1'?'暂停':'启用'}</a>
                   <Divider type="vertical" />
                   <a onClick={e=>this.openModelClick(`${record.id}`)}  href="javascript:;">查看任务执行</a>
                 </span>

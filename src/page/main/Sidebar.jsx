@@ -34,8 +34,9 @@ export default class SiderBar extends React.Component {
             >
              <Spin spinning={this.state.loading} delay={100}>
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
-                <Menu.Item key="2"><Link to='/Job'>任务列表</Link></Menu.Item>
-                <Menu.Item key="6"><Link to='/Transfer'>脚本列表</Link></Menu.Item>
+                <Menu.Item key="1"><Link to='/Job'>任务列表</Link></Menu.Item>
+                <Menu.Item key="2"><Link to='/Transfer'>脚本列表</Link></Menu.Item>
+                <Menu.Item key="3"><Link to='/Fndvar'>变量列表</Link></Menu.Item>
                     {/* <SubMenu key="sub1" title={<span><Icon type="mail" /><span>任务的列表</span></span>}>
                        
                         <Menu.Item key="2"><Link to='/Job'>任务列表</Link></Menu.Item>

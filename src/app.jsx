@@ -48,7 +48,11 @@ const TransferRouter = Loadable({
     loading: loading,
     delay:3000
 });
-
+const FndvarRouter = Loadable({
+    loader: () => import('./page/fndvar/routerFndvar.jsx'),
+    loading: loading,
+    delay:3000
+});
 class App extends React.Component {
     render() {
 
@@ -81,6 +85,7 @@ class App extends React.Component {
                             <Route path="/job" component={JobRouter}/>
                             <Route path="/user" component={UserRouter}/>
                             <Route path="/Transfer" component={TransferRouter}/>
+                            <Route path="/Fndvar" component={FndvarRouter}/>
                         </Switch>
                     </Layout>
                 );

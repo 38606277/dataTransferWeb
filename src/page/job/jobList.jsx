@@ -36,7 +36,7 @@ class JobList extends React.Component{
             listParam.keyword    = this.state.searchKeyword;
         }
         _job.getList(listParam).then(response => {
-            this.setState({list:response.data});
+            this.setState({list:response.data.resultRows,total:response.data.resultTotal});
         }, errMsg => {
             this.setState({
                 list : []
@@ -244,7 +244,9 @@ class JobList extends React.Component{
                 </Tooltip>
                 
                 <Table dataSource={this.state.list} columns={columns}  pagination={false}/>
-                 
+                <Pagination current={this.state.pageNumd} 
+                        total={this.state.total}  showTotal={total => `共 ${this.state.total}条`}
+                        onChange={(pageNumd) => this.onPageNumChange(pageNumd)}/> 
             </Card>
             <div>
                 <Modal  title="执行结果列表" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
@@ -257,7 +259,7 @@ class JobList extends React.Component{
                         dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
                         <Pagination current={this.state.pageNumd} 
                         total={this.state.totald}  showTotal={total => `共 100条`}
-                        onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
+                        onChange={(pageNum) => this.onPageNumdChange(pageNum)}/> 
                 </Modal>
             </div>
             </div>

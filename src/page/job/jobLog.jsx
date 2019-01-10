@@ -12,13 +12,18 @@ class JobLog extends React.Component{
             id: this.props.match.params.id,
             list            : [],
             seconds: 0,
-            score: 0
+            score: 0,
+            total:0,num:0
         };
     }
     tick = () => {
         const { seconds } = this.state;
         this.setState({ seconds: seconds + 1});
-        this.loadlogList(this.state.seconds);
+        if(this.state.total!=0 && this.state.num!=this.state.total){
+            this.loadlogList();
+        }else if(this.state.total==0 && this.state.num==0){
+            this.loadlogList();
+        }
     }
     
     componentDidMount(){
@@ -28,15 +33,14 @@ class JobLog extends React.Component{
         clearInterval(this.interval);
     }
    
-    loadlogList(i){
+    loadlogList(){
         _job.getJobExecutePorcess(this.state.id).then(response => {
             if(response.resultCode=='1000'){
                 let num = parseFloat(response.data.current);
                 let total = parseFloat(response.data.count);
-                console.log((Math.round(num / total * 10000) / 100.00));
                 let score= total <= 0 ? "0" : (Math.round(num / total * 10000) / 100.00);
                 // this.setState({list:[...this.state.list,{id:this.state.seconds}]});
-                this.setState({ score: score });
+                this.setState({ score: score,total:total,num:num });
             }
         }, errMsg => {
             this.setState({

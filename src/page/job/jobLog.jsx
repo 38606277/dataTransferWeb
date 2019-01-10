@@ -33,7 +33,8 @@ class JobLog extends React.Component{
             if(response.resultCode=='1000'){
                 let num = parseFloat(response.data.current);
                 let total = parseFloat(response.data.count);
-                score= total <= 0 ? "0" : (Math.round(num / total * 10000) / 100.00);
+                console.log((Math.round(num / total * 10000) / 100.00));
+                let score= total <= 0 ? "0" : (Math.round(num / total * 10000) / 100.00);
                 // this.setState({list:[...this.state.list,{id:this.state.seconds}]});
                 this.setState({ score: score });
             }

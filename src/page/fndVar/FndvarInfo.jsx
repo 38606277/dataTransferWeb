@@ -147,10 +147,12 @@ class FndvarInfo extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col span={24}>
-                <FormItem {...tailFormItemLayout} label='脚本内容'>
-                    <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
+              <Col span={4} style={{textAlign:'right'}}>
+                <FormItem label='变量内容'>
                 </FormItem>
+              </Col>
+              <Col span={20}>
+                    <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
               </Col>
             </Row>
             <FormItem {...BtnFormItemLayout}>

@@ -82,13 +82,22 @@ class JobList extends React.Component{
             });
         }
     }
-    stopJob(id){
-        _job.pauseJob(id).then(response => {
-            alert("暂停成功");
-            this.loadJobList();
-        }, errMsg => {
-            alert("暂停失败");
-        });
+    stopJob(id,status){
+        if(status==0){
+            _job.pauseJob(id).then(response => {
+                alert("暂停成功");
+                this.loadJobList();
+            }, errMsg => {
+                alert("暂停失败");
+            });
+        }else{
+            _job.executeJob(id).then(response => {
+                alert("启动成功");
+                this.loadJobList();
+            }, errMsg => {
+                alert("启动失败");
+            });
+        }  
     }
   //打开模式窗口
   openModelClick(id){
@@ -158,16 +167,17 @@ class JobList extends React.Component{
             dataIndex: 'job_describe',
             key: 'job_describe'
        
-        }, {
-            title: '是否启用',
-            dataIndex: 'job_status',
-            key: 'job_status',
-            render: (text, record) => (
-                <span>
-                   {record.job_status=='0'?'停用':'启用'}
-                </span>
-            ),
-          },
+        }, 
+        // {
+        //     title: '是否启用',
+        //     dataIndex: 'job_status',
+        //     key: 'job_status',
+        //     render: (text, record) => (
+        //         <span>
+        //            {record.job_status=='0'?'停用':'启用'}
+        //         </span>
+        //     ),
+        //   },
           {
             title: '任务执行状态',
             dataIndex: 'jobStatusStr',
@@ -181,52 +191,54 @@ class JobList extends React.Component{
                   <Divider type="vertical" />
                   <a onClick={()=>this.deleteJob(`${record.id}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.stopJob(`${record.id}`)} href="javascript:;">暂停</a>
+                  <a onClick={()=>this.stopJob(`${record.id}`,`${record.job_status}`)} href="javascript:;">{record.job_status=='0'?'暂停':'启用'}</a>
                   <Divider type="vertical" />
                   <a onClick={e=>this.openModelClick(`${record.id}`)}  href="javascript:;">查看任务执行</a>
                 </span>
               ),
           }];
           const dictionaryColumns=[{
-            title: '任务编号',
-            dataIndex: 'id',
-            key: 'id'
+                title: '任务编号',
+                dataIndex: 'id',
+                key: 'id'
             }, {
-            title: '任务名称',
-            dataIndex: 'job_name',
-            key: 'job_name',
-            // render: function (text, record, index) {
-            //     return <Link to={`/user/UserView/${record.id}`}>{text}</Link>;
-            // }
+                title: '任务名称',
+                dataIndex: 'job_name',
+                key: 'job_name',
             }, {
-            title: '开始时间',
-            dataIndex: 'begin_time',
-            key: 'begin_time',
+                title: '开始时间',
+                dataIndex: 'begin_time',
+                key: 'begin_time',
 
             }, {
-            title: '结束进间',
-            dataIndex: 'end_time',
-            key: 'end_time'
+                title: '结束进间',
+                dataIndex: 'end_time',
+                key: 'end_time'
             }, {
-            title: '执行结果',
-            dataIndex: 'jobClassPath',
-            key: 'jobClassPath',
+                title: '执行结果',
+                dataIndex: 'job_process',
+                key: 'job_process',
             }, {
-            title: '失败原因',
-            dataIndex: 'jobDescribe',
-            key: 'jobDescribe'
+                title: '失败原因',
+                dataIndex: 'job_failure_reason',
+                key: 'job_failure_reason'
             }, {
-            title: '任务状态',
-            dataIndex: 'job_status',
-            key: 'job_status'
-            // }, {
-            // title: '操作',
-            // dataIndex: '操作',
-            // render: (text, record) => (
-            //     <span>
-            //     {record.userId != '1' ? <Link to={`/user/userInfo/${record.id}`}>编辑</Link> : ''}
-            //     </span>
-            // ),
+                title: '任务状态',
+                dataIndex: 'job_status',
+                key: 'job_status',
+                render: (text, record) => (
+                        <span>
+                        {record.job_status== '0' ? '暂停': '启用'}
+                        </span>
+                )       
+            }, {
+                title: '操作',
+                dataIndex: '操作',
+                render: (text, record) => (
+                    <span>
+                    <Link to={`/Job/jobLog/${record.id}`}>日志</Link>
+                    </span>
+                ),
             }];
         return (
             <div id="page-wrapper">

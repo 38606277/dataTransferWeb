@@ -17,6 +17,9 @@ class JobService{
     getJobExecuteByJobId(page){
         return HttpService.post('transfer/jobExecute/getJobExecuteByJobId',JSON.stringify(page));
     }
+    getJobExecutePorcess(id){
+        return HttpService.post('transfer/jobExecute/getJobExecutePorcess',JSON.stringify({job_execute_id:id}));
+    }
     // 获取任务详情
     getJobInfo(JobId){
         return HttpService.post('transfer/job/getJobById',JSON.stringify({id:JobId}));

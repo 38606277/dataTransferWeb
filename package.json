@@ -57,6 +57,7 @@
     "react-router-dom": "4.2.2",
     "react-loadable": "^5.5.0",
     "simditor": "^2.3.6",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^2.0.4",
+    "react-circle":"1.1.1"
   }
 }

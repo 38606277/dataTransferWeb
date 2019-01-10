@@ -13,8 +13,8 @@ class TransferList extends React.Component{
         super(props);
         this.state = {
             list            : [],
-            pageNumd         : 1,
-            perPaged        : 10,
+            pageNum         : 1,
+            perPage        : 10,
             listType        :'list',
             searchKeyword:'',
             dictionaryList:[],
@@ -29,14 +29,14 @@ class TransferList extends React.Component{
     }
     loadTransferList(){
         let listParam = {};
-        listParam.pageNumd  = this.state.pageNumd;
-        listParam.perPaged  = this.state.perPaged;
+        listParam.pageNum  = this.state.pageNum;
+        listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
         }
         _transfer.getList(listParam).then(response => {
-            this.setState({list:response.data});
+            this.setState({list:response.data.resultRows,total:response.data.resultTotal});
         }, errMsg => {
             this.setState({
                 list : []
@@ -45,9 +45,9 @@ class TransferList extends React.Component{
         });
     }
     // 页数发生变化的时候
-    onPageNumChange(pageNumd){
+    onPageNumChange(pageNum){
         this.setState({
-            pageNumd : pageNumd
+            pageNum : pageNum
         }, () => {
             this.loadTransferList();
         });
@@ -65,7 +65,7 @@ class TransferList extends React.Component{
         let listType = searchKeyword === '' ? 'list' : 'search';
         this.setState({
             listType:listType,
-            pageNumd         : 1,
+            pageNum         : 1,
             searchKeyword   : searchKeyword
         }, () => {
             this.loadTransferList();
@@ -113,20 +113,22 @@ class TransferList extends React.Component{
         return (
             <div id="page-wrapper">
             <Card title="脚本列表">
-                <Tooltip>
+                {/* <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                         />
-                </Tooltip>
+                </Tooltip> */}
                 <Tooltip>
                     <Button href="#/Transfer/TransferInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建脚本</Button>
                 </Tooltip>
                 
                 <Table dataSource={this.state.list} columns={columns}  pagination={false}/>
-                 
+                <Pagination current={this.state.pageNum} 
+                        total={this.state.total}  showTotal={total => `共 ${this.state.total}条`}
+                        onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
             </Card>
             
             </div>

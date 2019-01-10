@@ -13,8 +13,8 @@ class JobList extends React.Component{
         super(props);
         this.state = {
             list            : [],
-            pageNumd         : 1,
-            perPaged        : 10,
+            pageNum        : 1,
+            perPage        : 10,
             listType        :'list',
             searchKeyword:'',
             dictionaryList:[],
@@ -29,8 +29,8 @@ class JobList extends React.Component{
     }
     loadJobList(){
         let listParam = {};
-        listParam.pageNumd  = this.state.pageNumd;
-        listParam.perPaged  = this.state.perPaged;
+        listParam.pageNum  = this.state.pageNum;
+        listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
@@ -45,9 +45,9 @@ class JobList extends React.Component{
         });
     }
     // 页数发生变化的时候
-    onPageNumChange(pageNumd){
+    onPageNumChange(pageNum){
         this.setState({
-            pageNumd : pageNumd
+            pageNum : pageNum
         }, () => {
             this.loadJobList();
         });
@@ -65,7 +65,7 @@ class JobList extends React.Component{
         let listType = searchKeyword === '' ? 'list' : 'search';
         this.setState({
             listType:listType,
-            pageNumd         : 1,
+            pageNum         : 1,
             searchKeyword   : searchKeyword
         }, () => {
             this.loadJobList();
@@ -114,11 +114,11 @@ class JobList extends React.Component{
    loadModelData(param){
     let page = {};
     page.pageNumd  = this.state.pageNumd;
-    page.perPaged  = this.state.perPaged;
+    page.perPaged  = 10;
     page.searchDictionary=this.state.searchDictionary;
     page.job_id=param;
         _job.getJobExecuteByJobId(page).then(response=>{
-             this.setState({dictionaryList:response.data,totald:0},function(){});
+             this.setState({dictionaryList:response.data.resultRows,totald:response.data.resultTotal});
         }).catch(error=>{
             this.setState({loading:false});
             message.error(error);
@@ -256,9 +256,9 @@ class JobList extends React.Component{
                 </Tooltip>
                 
                 <Table dataSource={this.state.list} columns={columns}  pagination={false}/>
-                <Pagination current={this.state.pageNumd} 
+                <Pagination current={this.state.pageNum} 
                         total={this.state.total}  showTotal={total => `共 ${this.state.total}条`}
-                        onChange={(pageNumd) => this.onPageNumChange(pageNumd)}/> 
+                        onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
             </Card>
             <div>
                 <Modal  title="执行结果列表" width='800px' visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>

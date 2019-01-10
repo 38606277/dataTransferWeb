@@ -153,7 +153,7 @@ class TransferInfo extends React.Component {
            
 
             <FormItem {...BtnFormItemLayout}>
-              <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>创建</Button>
+              <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>保存</Button>
               <Button href="#/Transfer" type="primary" style={{ marginLeft: '30px' }}>返回</Button>
             </FormItem>
           </Form>

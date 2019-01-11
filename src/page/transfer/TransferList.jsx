@@ -113,14 +113,14 @@ class TransferList extends React.Component{
         return (
             <div id="page-wrapper">
             <Card title="脚本列表">
-                {/* <Tooltip>
+                <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                         />
-                </Tooltip> */}
+                </Tooltip>
                 <Tooltip>
                     <Button href="#/Transfer/TransferInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建脚本</Button>
                 </Tooltip>

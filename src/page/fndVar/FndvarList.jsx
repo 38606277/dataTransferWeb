@@ -107,14 +107,14 @@ class FndvarList extends React.Component{
         return (
             <div id="page-wrapper">
             <Card title="全局变量列表">
-                {/* <Tooltip>
+                <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                         />
-                </Tooltip> */}
+                </Tooltip>
                 <Tooltip>
                     <Button href="#/Fndvar/FndvarInfo/Create/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建变量</Button>
                 </Tooltip>

@@ -37,6 +37,7 @@ export default class SiderBar extends React.Component {
                 <Menu.Item key="1"><Link to='/Job'>任务列表</Link></Menu.Item>
                 <Menu.Item key="2"><Link to='/Transfer'>脚本列表</Link></Menu.Item>
                 <Menu.Item key="3"><Link to='/Fndvar'>变量列表</Link></Menu.Item>
+                <Menu.Item key="4"><Link to='/dbs'>数据库列表</Link></Menu.Item>
                     {/* <SubMenu key="sub1" title={<span><Icon type="mail" /><span>任务的列表</span></span>}>
                        
                         <Menu.Item key="2"><Link to='/Job'>任务列表</Link></Menu.Item>

@@ -24,8 +24,9 @@ class JobInfo extends React.Component {
       year:"",
       selectTransferList:[],
       selectList:[],
-      mkey:"",
-      mvalue:"",
+      mkey1:"",      mvalue1:"",
+      mkey2:"",      mvalue2:"",
+      mkey3:"task_path",      mvalue3:"",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
@@ -139,12 +140,13 @@ class JobInfo extends React.Component {
  //模式窗口点击确认
  handleOktwo = (e) => {
    
-   this.setState({visibletwo: false, mkey:'',mvalue:''});
-   this.props.form.setFieldsValue({ ['job_param']: '{'+this.state.mkey+':'+this.state.mvalue+'}' });
+   this.setState({visibletwo: false, mkey1:'',mvalue1:'',mkey2:'',mvalue2:'',mkey3:'task_path',mvalue3:''});
+   this.props.form.setFieldsValue({ ['job_param']: '{'+this.state.mkey1+':"'+this.state.mvalue1+'",'+this.state.mkey2+':"'+this.state.mvalue2+'",'+
+   this.state.mkey3+':"'+this.state.mvalue3+'"}' });
  }
  //模式窗口点击取消
  handleCanceltwo = (e) => {
-   this.setState({visibletwo: false, mkey:'',mvalue:''});
+   this.setState({visibletwo: false, mkey1:'',mvalue1:'',mkey2:'',mvalue2:'',mkey3:'task_path',mvalue3:''});
  }
 
   render() {
@@ -298,11 +300,19 @@ class JobInfo extends React.Component {
               <Modal  title="param" width='600px' visible={this.state.visibletwo}  onOk={this.handleOktwo} onCancel={this.handleCanceltwo}>
                   <Row>
                     <Col span={3}>key</Col>
-                    <Col span={3} style={{width:80,marginLeft:20}}>value</Col>
+                    <Col span={3} style={{width:80,marginLeft:60}}>value</Col>
                   </Row>
-                  <Row>
-                    <Col span={3}><Input name='mkey' value={this.state.mkey} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80}}/></Col>
-                    <Col span={3}><Input name='mvalue' value={this.state.mvalue} onChange={(e)=>this.onValueChangetwo(e)} style={{width:80,marginLeft:20}}/></Col>
+                  <Row style={{padding:'5px 5px 5px 0px'}}>
+                    <Col span={3}><Input name='mkey1' value={this.state.mkey1} onChange={(e)=>this.onValueChangetwo(e)} style={{width:120}}/></Col>
+                    <Col span={3}><Input name='mvalue1' value={this.state.mvalue1} onChange={(e)=>this.onValueChangetwo(e)} style={{width:120,marginLeft:60}}/></Col>
+                  </Row>
+                  <Row style={{padding:'5px 5px 5px 0px'}}>
+                    <Col span={3}><Input name='mkey2' value={this.state.mkey2} onChange={(e)=>this.onValueChangetwo(e)} style={{width:120}}/></Col>
+                    <Col span={3}><Input name='mvalue2' value={this.state.mvalue2} onChange={(e)=>this.onValueChangetwo(e)} style={{width:120,marginLeft:60}}/></Col>
+                  </Row>
+                  <Row style={{padding:'5px 5px 5px 0px'}}>
+                    <Col span={3}><Input name='mkey3' value={this.state.mkey3} onChange={(e)=>this.onValueChangetwo(e)} style={{width:120}}/></Col>
+                    <Col span={3}><Input name='mvalue3' value={this.state.mvalue3} onChange={(e)=>this.onValueChangetwo(e)} style={{width:120,marginLeft:60}}/></Col>
                   </Row>
               </Modal>
           </div>

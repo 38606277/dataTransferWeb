@@ -49,7 +49,7 @@ class JobService{
         return HttpService.post('transfer/job/resumeJob',JSON.stringify({id:id}));
     }
     getAllTransfer(){
-        return HttpService.post('transfer/sql/getAllTransfer',null);
+        return HttpService.post('transfer/sql/getAllTransferList',null);
     }
 }
 

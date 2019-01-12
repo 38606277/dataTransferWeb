@@ -36,6 +36,7 @@ class JobInfo extends React.Component {
         let sl=[{id:0,name:'停用'},{id:1,name:'启用'}];
         const children2=[],children3=[];
         _job.getAllTransfer().then(response=>{
+          console.log(response);
           if(response.resultCode!='3000'){
             let rlist=response.data;
             for (let i = 0; i < rlist.length; i++) {

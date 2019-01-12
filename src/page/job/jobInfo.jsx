@@ -24,8 +24,8 @@ class JobInfo extends React.Component {
       year:"",
       selectTransferList:[],
       selectList:[],
-      mkey1:"",      mvalue1:"",
-      mkey2:"",      mvalue2:"",
+      mkey1:"global_param",      mvalue1:"",
+      mkey2:"transfer_id",      mvalue2:"",
       mkey3:"task_path",      mvalue3:"",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -140,13 +140,13 @@ class JobInfo extends React.Component {
  //模式窗口点击确认
  handleOktwo = (e) => {
    
-   this.setState({visibletwo: false, mkey1:'',mvalue1:'',mkey2:'',mvalue2:'',mkey3:'task_path',mvalue3:''});
+   this.setState({visibletwo: false, mkey1:'global_param',mvalue1:'',mkey2:'transfer_id',mvalue2:'',mkey3:'task_path',mvalue3:''});
    this.props.form.setFieldsValue({ ['job_param']: '{'+this.state.mkey1+':"'+this.state.mvalue1+'",'+this.state.mkey2+':"'+this.state.mvalue2+'",'+
    this.state.mkey3+':"'+this.state.mvalue3+'"}' });
  }
  //模式窗口点击取消
  handleCanceltwo = (e) => {
-   this.setState({visibletwo: false, mkey1:'',mvalue1:'',mkey2:'',mvalue2:'',mkey3:'task_path',mvalue3:''});
+   this.setState({visibletwo: false, mkey1:'global_param',mvalue1:'',mkey2:'transfer_id',mvalue2:'',mkey3:'task_path',mvalue3:''});
  }
 
   render() {

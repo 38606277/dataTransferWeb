@@ -125,12 +125,16 @@ class TransferInfo extends React.Component {
       },
     };
     return (
-      <div id="page-wrapper">
+      <div id="page-wrapper" style={{ height: '100%', width: '100%', border: "1px" }} >
         <Card title={this.state.transfer_id == 'null' ? '新建脚本' : '编辑脚本'}>
           <Form onSubmit={this.handleSubmit}>
             <Row>
+            <Col span={2} style={{textAlign:'right'}}>
+              <FormItem label="脚本名称"></FormItem>
+                
+              </Col>
               <Col span={12}>
-                <FormItem {...formItemLayout} label="脚本名称">
+                <FormItem {...formItemLayout} label="">
                   {getFieldDecorator('transfer_name', {
                     rules: [{ required: true, message: '请输入脚本名称!' }],
                   })(
@@ -141,12 +145,12 @@ class TransferInfo extends React.Component {
              
             </Row>
             <Row>
-              <Col span={4} style={{textAlign:'right'}}>
+              <Col span={2} style={{textAlign:'right'}}>
               <FormItem label="脚本内容"></FormItem>
                 
               </Col>
-              <Col span={20}>
-                <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
+              <Col span={22}>
+                <CodeMirror ref="editorsql" value='' style={{ height: '100%', width: '100%', border: "1px" }} options={options} />
 
                 </Col>
             </Row>

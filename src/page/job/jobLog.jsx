@@ -36,8 +36,8 @@ class JobLog extends React.Component{
     loadlogList(){
         _job.getJobExecutePorcess(this.state.id).then(response => {
             if(response.resultCode=='1000'){
-                let num = parseFloat(response.data.current);
-                let total = parseFloat(response.data.count);
+                let num = parseFloat(response.data.current==null?0:response.data.current);
+                let total = parseFloat(response.data.count==null?0:response.data.count);
                 let score= total <= 0 ? "0" : (Math.round(num / total * 10000) / 100.00);
                 // this.setState({list:[...this.state.list,{id:this.state.seconds}]});
                 this.setState({ score: score,total:total,num:num });

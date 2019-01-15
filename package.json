@@ -10,7 +10,8 @@
     "eject": "react-scripts eject",
     "dev": "node_modules/.bin/webpack-dev-server --progress --colors",
     "dist": "WEBPACK_ENV=online node_modules/.bin/webpack -p  --progress --colors",
-    "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p"
+    "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p",
+    "build": "webpack --mode production"
   },
   "devDependencies": {
     "babel-core": "6.26.3",
